@@ -24,16 +24,21 @@ console.log("________");
 console.log("Zadanie 3");
 
 const average = (...theArgs) => {
-    console.log('długosc to ' + theArgs.length);
-    return theArgs.reduce((previous, current) => {
-        return (previous + current)/theArgs.length 
-        }
-    )
+	const arrayLength = theArgs.length;
+  let sumOfValue = 0;
+  
+  for(let value of theArgs) {  
+  	sumOfValue += value;
+  }
+  
+  return sumOfValue / arrayLength;    
 }
+
+console.log(average(1, 3, 6, 6));
 
 console.log(average(1));
 console.log(average(1, 3));
-console.log(average(1, 3, 6, 6)); //wynik 1.9375 why? 
+
 
 console.log("________");
 //ZADANIE 4 
@@ -44,15 +49,13 @@ console.log(average(...grades));
 
 console.log("________");
 //ZADANIE 5 
-let firstname = 'Iwona';
-let lastname = 'Nowak'; 
 
-let table = [1, 4, 'Iwona', false, 'Nowak'];
-let [pierwszy, drugi, trzeci , czwarty, ...rest] = table;
 
-console.log(table);
-console.log(trzeci + ' ' + rest);
-console.log(trzeci);
-console.log(rest);
+const alien = [1, 4, 'Iwona', false, 'Nowak'];
+
+// destrution of Array
+const [a, b, firstName, c, lastName] = alien;
+
+console.log(firstName, lastName);
 
 //podejrzewam ze rozwiązanie jest inne ;P 
