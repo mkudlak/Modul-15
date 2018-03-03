@@ -1,0 +1,19 @@
+body {
+    background-color: rgb(119, 157, 157);
+    color: white;
+    
+}
+form {
+    text-align: center;
+    font-size: 30px;
+    margin: 30px 20px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+#searchText {
+    font-size: 30px;
+    margin-left: 10px;
+}
+div {
+    margin-left: 80px;
+}
