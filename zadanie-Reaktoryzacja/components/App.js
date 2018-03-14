@@ -1,12 +1,4 @@
-/*Algorytm postępowania dla tej metody jest następujący:
 
-pobierz na wejściu wpisywany tekst,
-zasygnalizuj, że zaczął się proces ładowania,
-Rozpocznij pobieranie gifa,
-Na zakończenie pobierania:
-przestań sygnalizować ładowanie,
-ustaw nowego gifa z wyniku pobierania,
-ustaw nowy stan dla wyszukiwanego tekstu.*/
 var GIPHY_API_URL = 'https://api.giphy.com';
 var GIPHY_PUB_KEY = 'aPUfb6B0gr9Emm5Wx6l84Ij7l6hbYNe7';
 
@@ -34,21 +26,36 @@ App = React.createClass({
     },
     //rozpocznij pobieranie gifa,
     getGif: function (searchingText, callback) {  // 1.
-        var url = GIPHY_API_URL + '/v1/gifs/random?api_key=' + GIPHY_PUB_KEY + '&tag=' + searchingText;  // 2.
-        var xhr = new XMLHttpRequest();  // 3.
-        xhr.open('GET', url);
-        xhr.onload = function () {
-            if (xhr.status === 200) {
-                var data = JSON.parse(xhr.responseText).data; // 4.
-                var gif = {  // 5.
-                    url: data.fixed_width_downsampled_url,
-                    sourceUrl: data.url
+        return new Promise(
+            function (resolve, reject) {
+                var url = GIPHY_API_URL + '/v1/gifs/random?api_key=' + GIPHY_PUB_KEY + '&tag=' + searchingText;  // 2.
+                var xhr = new XMLHttpRequest();  // 3.
+                xhr.open('GET', url);
+                xhr.onload = function () {
+                    if (xhr.status === 200) {
+                        var data = JSON.parse(xhr.responseText).data; // 4.
+                        var gif = {  // 5.
+                            url: data.fixed_width_downsampled_url,
+                            sourceUrl: data.url
+                        };
+                        resolve(this.response);  // 6.
+                    } else {
+                        reject(new Error(this.statusText));
+                    }
                 };
-                callback(gif);  // 6.
-            }
-        };
-        xhr.send();
+                request.onerror = function () {
+                    reject(new Error(
+                       `XMLHttpRequest Error: ${this.statusText}`));
+                };
+                request.open('GET', url);
+                request.send();
+            });
+    getGif()
+    .then(response => console.log('Contents: ' + response))
+    .catch(error => console.error('Something went wrong', error));        
     },
+    
+
 
     render: function () {
 
