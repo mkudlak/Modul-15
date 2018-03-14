@@ -2,22 +2,25 @@ body {
     background-color: rgb(70, 95, 95);
     color: white;
     text-align: center;
-    font-size: 50px;
+    font-size: 80px;
     margin-top: 50px;
 }
-a {
+button {
     color: black;
     text-decoration: none;
     text-transform: uppercase;
     margin: 20px;
-    padding: 10px 20px;
+    padding: 20px 40px;
+    border-radius: 5%;
+    background-color: rgb(70, 95, 95);
+    font-size: 20px;
 }
-a:hover {
-    cursor: pointer;;
-    color: white;
-    border: 1px solid white;
-    border-radius: 8%;
+button:hover {
+    background-color: rgb(46, 224, 224);
+    cursor: pointer;
+    color:white;
 }
+
 .stopwatch {
     margin: 50px;
 }

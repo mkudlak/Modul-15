@@ -1,86 +1,117 @@
-//tworzenia klasy Stopwatch//podstawowy szablon klasy oraz jej instancję 
-class Stopwatch {
-    constructor(display) {
-        this.running = false;
-        this.display = display;
-        this.reset();
-        this.print(this.times);
-    }
-    // implementacji czterech metod: start, stop, reset i print
-    reset() {
-        this.times = {
+class Stopwatch extends React.Component {
+    constructor(props) {
+      super(props)
+      this.state = {
+        running: false,
+        times: {      
             minutes: 0,
             seconds: 0,
             miliseconds: 0
-        };
+        },
+        results: []
+      }
     }
-
-    print() {
-        this.display.innerText = this.format(this.times);
+  
+    reset() {
+      this.setState({
+        times: {
+          minutes: 0,
+          seconds: 0,
+          miliseconds: 0
+        }
+      });
     }
-
-    format(times) {
-        return `${pad0(times.minutes)}:${pad0(times.seconds)}:${pad0(Math.floor(times.miliseconds))}`;
+  
+    getFormattedTimes() {
+      //tworzymy zmienne
+      let{minutes, seconds, miliseconds} = this.state.times;
+      return `${pad0(minutes)}:${pad0(seconds)}:${pad0(Math.floor(miliseconds))}`;
     }
-
+  
     start() {
-        if (!this.running) {
-            this.running = true;
-            this.watch = setInterval(() => this.step(), 10);
-        }
-    }
-
+      if (!this.state.running) {
+        this.setState({
+          running: true,
+          watch: setInterval(() => this.step(), 10)
+        })
+      }
+    }  
+  
     step() {
-        if (!this.running) return;
-        this.calculate();
-        this.print();
+      if (!this.state.running) return;
+      this.calculate();
     }
-
+  
     calculate() {
-        this.times.miliseconds += 1;
-        if (this.times.miliseconds >= 100) {
-            this.times.seconds += 1;
-            this.times.miliseconds = 0;
-        }
-        if (this.times.seconds >= 60) {
-            this.times.minutes += 1;
-            this.times.seconds = 0;
-        }
+      let{minutes, seconds, miliseconds} = this.state.times;
+      miliseconds += 1;
+      if (miliseconds >= 100) {
+        seconds += 1;
+        miliseconds = 0;
+      }
+      if (seconds >= 60) {
+        minutes += 1;
+        seconds = 0;
+      }
+      this.setState({
+        times: {
+          minutes,
+          seconds,
+          miliseconds
+        }  
+      });
     }
-
+  
     stop() {
-        this.running = false;
-        clearInterval(this.watch);
+      this.setState({
+        running: false
+      });
+      clearInterval(this.state.watch);
     }
-
-    resetTime() {
-        this.reset();
-        this.print();
+  
+    stopAndReset() {
+      this.setState({
+        running: false,
+        times: {
+          minutes: 0,
+          seconds: 0,
+          miliseconds: 0
+        }
+      });
     }
-
-}
-
-const stopwatch = new Stopwatch(
-    document.querySelector('.stopwatch'));
-
-
-//metody, które będą wykonywane po kliknięciu w odpowiednie przyciski
-let startButton = document.getElementById('start');
-startButton.addEventListener('click', () => stopwatch.start());
-
-let stopButton = document.getElementById('stop');
-stopButton.addEventListener('click', () => stopwatch.stop());
-
-let resetButton = document.getElementById('reset');
-resetButton.addEventListener('click', () => stopwatch.resetTime());
-
-//Funkcja pad0 ma za zadanie dodać zero do liczb jednocyfrowych
-function pad0(value) {
+  
+    addResult() {
+      this.setState({
+        results: this.state.results.concat([this.getFormattedTimes()]) 
+      });
+    }
+  
+  
+    render() {
+      var resultsElements = this.state.results.map(function(item, index) {
+        return (<li key={index}>{item}</li>)
+      }) 
+      return ( 
+        <div>
+          <nav className="controls">
+            <button className="button" onClick={this.start.bind(this)}>Start</button>
+            <button className="button" onClick={this.stop.bind(this)}>Stop</button>
+            <button className="button" onClick={this.stopAndReset.bind(this)}>Reset</button>
+          </nav>
+          <div>{this.getFormattedTimes()}</div>
+        </div>
+      )
+    }
+  
+  }
+  
+  function pad0(value) {
     let result = value.toString();
     if (result.length < 2) {
-        result = '0' + result;
+      result = '0' + result;
     }
     return result;
-}
-
-
+  }
+  
+  
+  ReactDOM.render(<Stopwatch />, document.getElementById('app'));
